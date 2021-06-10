@@ -16,14 +16,19 @@ long time_control;
 float dt;
 
 void setup() {
-  Wire.begin(4,5);
-  Serial.begin(115200); 
-  Serial.println();
+  Serial.begin(115200);
   init_mpu(); 
-  while(!check_mpu()){init_mpu();}
-  gyro_calibrator(2000);
 }
-void loop() {
+void init_mpu(){
+  Wire.begin(4,5);
+  config_mpu(); 
+  while(!check_mpu()){init_mpu();}
+  gyro_calibrator_mpu(2000);
+}
+void loop(){
+  get_angles_mpu();
+  }
+void get_angles_mpu() {
   read_mpu();
   Acc[1] = atan(-1*(AcX/A_R)/sqrt(pow((AcY/A_R),2) + pow((AcZ/A_R),2)))*RAD_TO_DEG;
   Acc[0] = atan((AcY/A_R)/sqrt(pow((AcX/A_R),2) + pow((AcZ/A_R),2)))*RAD_TO_DEG;
@@ -49,7 +54,7 @@ void loop() {
   Serial.println(Angle[1]);
   delay(10);
 }
-void init_mpu(){
+void config_mpu(){
   Wire.beginTransmission(MPU6050);
   Wire.write(0x6B);
   Wire.write(0x00);
@@ -116,7 +121,7 @@ void read_mpu(){
   GyY=Wire.read()<<8|Wire.read();
   GyZ=Wire.read()<<8|Wire.read();
 }
-void gyro_calibrator(int count_entries){
+void gyro_calibrator_mpu(int count_entries){
   for(int i=0; i<count_entries; i++){
     read_mpu();
     gyro_cal_X += GyX;
