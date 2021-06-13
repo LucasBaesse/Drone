@@ -30,15 +30,25 @@ void loop(){
   }
 void get_angles_mpu() {
   read_mpu();
-  Acc[1] = atan(-1*(AcX/A_R)/sqrt(pow((AcY/A_R),2) + pow((AcZ/A_R),2)))*RAD_TO_DEG;
-  Acc[0] = atan((AcY/A_R)/sqrt(pow((AcX/A_R),2) + pow((AcZ/A_R),2)))*RAD_TO_DEG;
+  
   Gy[0] -= gyro_cal_X;
   Gy[1] -= gyro_cal_Y;
   Gy[2] -= gyro_cal_Z;
   
-  Gy[0] = GyX/G_R;
-  Gy[1] = GyY/G_R;
-  Gy[2] = GyZ/G_R;
+  AcX /= A_R;
+  AcY /= A_R;
+  AcZ /= A_R;
+  
+  GyX /= G_R;
+  GyY /= G_R;
+  GyZ /= G_R;
+  
+  Acc[1] = atan(-1*(AcX)/sqrt(pow((AcY),2) + pow((AcZ),2)))*RAD_TO_DEG;
+  Acc[0] = atan((AcY)/sqrt(pow((AcX),2) + pow((AcZ),2)))*RAD_TO_DEG;
+    
+  Gy[0] = GyX;
+  Gy[1] = GyY;
+  Gy[2] = GyZ;
 
   dt = (millis() - time_control) / 1000.0;
   time_control = millis();
