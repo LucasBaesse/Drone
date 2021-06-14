@@ -1,18 +1,18 @@
 #include <ESP8266WiFi.h>
 #include <Wire.h>
-#define MPU6050 0x68
-#define CONFIGACC 0x00 //(+/- 8g)0x10, (+/-2g)0x00, (+/-4g)0x08
-#define CONFIGGYRO 0x00 //(250dps)0x00, (500dps)0x08, (1000dps)0b00010000
+#define MPU6050 0x68 // ENDEREÇO DO MPU6050
+#define CONFIGACC 0x00 //  (+/-2g)0x00, (+/-4g)0x08, (+/- 8g)0x10,
+#define CONFIGGYRO 0x00 // (250dps)0x00, (500dps)0x08, (1000dps)0x10
 #define A_R 16384.0 // 32768/2
 #define G_R 131 // 32768/250
-#define RAD_A_DEG 57.295779
+#define RAD_A_DEG 57.295779 // 1 radiano = 57.295779°
 
 #define sleepHB1    D4   //Habilita a saída do Modulo DRV8833V 
 #define sleepHB2    D3   //Habilita a saída do Modulo DRV8833V 
 
-long gyro_cal_X , gyro_cal_Y , gyro_cal_Z;
-int16_t AcX, AcY, AcZ, GyX, GyY, GyZ;
-float Acc[2];
+long gyro_cal_X , gyro_cal_Y , gyro_cal_Z; // Declaração dos eixos de calibragem do giroscópio
+int16_t AcX, AcY, AcZ, GyX, GyY, GyZ; // Declaração das variáveis que vão receber os dados do sensor MPU
+float Acc[2]; // D
 float Gy[3];
 float Angle[3];
 
@@ -34,10 +34,12 @@ int VelocidadeMotorEB = 0; //Velocidade Motor Esquerda Baixo
 int VelocidadeMotorDC = 0; //Velocidade Motor Direita Cima
 int VelocidadeMotorDB = 0; //Velocidade Motor Direita Baixo
 
+//CONFIGURAÇÃO DO WEB SERVER
 IPAddress ip(192, 168, 43, 50);
 IPAddress gateway(192, 168, 43, 1);
 IPAddress subnet(255, 255, 255, 0);
 WiFiServer server(80);
+//FIM DA CONFIGURAÇÃO DO WEB SERVER
 
 void setup() {
   
@@ -110,8 +112,19 @@ void ControlarMotorDB(int velocidadeGeral, int VelocidadeDB, int motorDB ){
   //digitalWrite(sleep, HIGH); //habilita
   
 }
-
+void desliga_motores(){
+  ControlarMotorEC( 0, 0 , motorEC );
+  ControlarMotorEB( 0, 0 , motorEB );
+  ControlarMotorDC( 0, 0, motorDC ); 
+  ControlarMotorDB( 0, 0, motorDB ); 
+}
 void loop() {
+ /* 
+    INÍCIO DAS TOMADAS DE DECISÃO COM OS DADOS RECEBIDOS DO MPU:
+    SE O ÂNGULO DE INCLINAÇÃO DE UM DOS EIXOS FOR MAIOR OU IGUAL 
+    A 5 OU -5, ENTÃO A POTÊNCIA DOS MOTORES É REAJUSTADA COM VALOR
+    PROPORCIONAL À INCLINAÇÃO 
+ */
   if(velocidadeGeral > 0){
     get_angles_mpu();
     if(Angle[0] >= 5 || Angle[1] >= 5 || Angle[0] <= -5 || Angle[1] <= -5){
@@ -127,10 +140,7 @@ void loop() {
             ControlarMotorEC( 0, VelocidadeMotorEC - Angle[0], motorEC );
             }
            else{
-            ControlarMotorEC( 0, 0 , motorEC );
-            ControlarMotorEB( 0, 0 , motorEB );
-            ControlarMotorDC( 0, 0, motorDC ); 
-            ControlarMotorDB( 0, 0, motorDB ); 
+            desliga_motores();
            }
           }
       }
@@ -146,10 +156,7 @@ void loop() {
             ControlarMotorDB( 0, VelocidadeMotorDB - Angle[0], motorDB );
             }
            else{
-            ControlarMotorEC( 0, 0 , motorEC );
-            ControlarMotorEB( 0, 0 , motorEB );
-            ControlarMotorDC( 0, 0, motorDC ); 
-            ControlarMotorDB( 0, 0, motorDB ); 
+            desliga_motores();
            }
           }
       }
@@ -165,10 +172,7 @@ void loop() {
             ControlarMotorEC( 0, VelocidadeMotorEC - Angle[1], motorEC );
             }
            else{
-            ControlarMotorEC( 0, 0 , motorEC );
-            ControlarMotorEB( 0, 0 , motorEB );
-            ControlarMotorDC( 0, 0, motorDC ); 
-            ControlarMotorDB( 0, 0, motorDB ); 
+            desliga_motores();
            }
           }
       }
@@ -184,10 +188,7 @@ void loop() {
             ControlarMotorEB( 0, VelocidadeMotorEB - Angle[1], motorEB );
             }
            else{
-            ControlarMotorEC( 0, 0 , motorEC );
-            ControlarMotorEB( 0, 0 , motorEB );
-            ControlarMotorDC( 0, 0, motorDC ); 
-            ControlarMotorDB( 0, 0, motorDB ); 
+            desliga_motores(); 
            }
           }
       }
@@ -204,10 +205,7 @@ void loop() {
             ControlarMotorEC( 0, VelocidadeMotorEC - modulo, motorEC );
             }
            else{
-            ControlarMotorEC( 0, 0 , motorEC );
-            ControlarMotorEB( 0, 0 , motorEB );
-            ControlarMotorDC( 0, 0, motorDC ); 
-            ControlarMotorDB( 0, 0, motorDB ); 
+            desliga_motores(); 
            }
 
           }
@@ -226,10 +224,7 @@ void loop() {
             ControlarMotorEB( 0, VelocidadeMotorEB - modulo, motorEB );
             }
            else{
-            ControlarMotorEC( 0, 0 , motorEC );
-            ControlarMotorEB( 0, 0 , motorEB );
-            ControlarMotorDC( 0, 0, motorDC ); 
-            ControlarMotorDB( 0, 0, motorDB ); 
+            desliga_motores(); 
            }
           }
         }
@@ -247,10 +242,7 @@ void loop() {
             ControlarMotorEC( 0, VelocidadeMotorEC - modulo, motorEC );
             }
            else{
-            ControlarMotorEC( 0, 0 , motorEC );
-            ControlarMotorEB( 0, 0 , motorEB );
-            ControlarMotorDC( 0, 0, motorDC ); 
-            ControlarMotorDB( 0, 0, motorDB ); 
+            desliga_motores();
            }
           }
         }
@@ -267,10 +259,7 @@ void loop() {
             ControlarMotorEC( 0, VelocidadeMotorEC - modulo, motorEC );
             }
            else{
-            ControlarMotorEC( 0, 0 , motorEC );
-            ControlarMotorEB( 0, 0 , motorEB );
-            ControlarMotorDC( 0, 0, motorDC ); 
-            ControlarMotorDB( 0, 0, motorDB ); 
+            desliga_motores();
            }
           }
        }
