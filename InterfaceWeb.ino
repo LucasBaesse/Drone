@@ -48,7 +48,7 @@ void loop() {
   buf += "<head><title>Drone de Segurança</title><style> body{background-color: rgb(247, 247, 247);} h1{color: rgb(0, 0, 0) } img {width: 90px; height: 90px; display:inline-block}</style></head>";
   buf += "<div style=background-color: rgb(255, 126, 20);><h1>Modos de Voo</h1></div>";
   buf += "<a href=\"?function=up\"><button><img src='https://image.flaticon.com/icons/png/512/120/120891.png'></button></a>";
-  buf += "<a href=\"?function=down\"><button><img src=https://img-premium.flaticon.com/png/512/120/120890.png?token=exp=1623199028~hmac=be09e81e3bd7668704655a3bb70e4f3c'></button></a>";
+  buf += "<a href=\"?function=down\"><button><img src='https://image.flaticon.com/icons/png/512/54/54785.png'></button></a>";
   buf += "<div style='position: fixed; left: 0; bottom: 0; width: 100%; background-color: rgb(255, 126, 20); text-align: center;''>&#169;</div>";
   buf += "</html>\n";
 

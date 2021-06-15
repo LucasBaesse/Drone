@@ -65,8 +65,6 @@ void setup() {
   init_mpu();
   //wifi_connect();
 }
-
-/*
   void wifi_connect() {
   Serial.println();
   Serial.println();
@@ -82,36 +80,37 @@ void setup() {
   Serial.println("WiFi connected");
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
-} */
+} 
 
-
+// ALTERA A POTÊNCIA DO MOTOR EC
 void ControlarMotorEC( int velocidadeGeral, int VelocidadeEC, int motorEC ){
 
   analogWrite(motorEC, VelocidadeMotorEC);
   //digitalWrite(sleep, HIGH); //habilita
   
 }
-
+// ALTERA A POTÊNCIA DO MOTOR EB
 void ControlarMotorEB(int velocidadeGeral, int VelocidadeEB, int motorEB ){
 
   analogWrite(motorEB, VelocidadeMotorEB);
   //digitalWrite(sleep, HIGH); //habilita
   
 }
-
+// ALTERA A POTÊNCIA DO MOTOR DC
 void ControlarMotorDC(int velocidadeGeral, int VelocidadeDC, int motorDC ){
   
   analogWrite(motorDC, VelocidadeMotorDC);
   //digitalWrite(sleep, HIGH); //habilita
   
 }
-
+// ALTERA A POTÊNCIA DO MOTOR DB
 void ControlarMotorDB(int velocidadeGeral, int VelocidadeDB, int motorDB ){
 
   analogWrite(motorDB, VelocidadeMotorDB);
   //digitalWrite(sleep, HIGH); //habilita
   
 }
+// PROCEDIMENTO QUE ZERA A POTÊNCIA DE TODOS OS MOTORES
 void desliga_motores(){
   ControlarMotorEC( 0, 0 , motorEC );
   ControlarMotorEB( 0, 0 , motorEB );
@@ -123,7 +122,7 @@ void loop() {
     INÍCIO DA TOMADA DE DECISÃO COM OS DADOS RECEBIDOS DO MPU:
     SE O ÂNGULO DE INCLINAÇÃO DE UM DOS EIXOS FOR MAIOR OU IGUAL 
     A 5 OU -5, ENTÃO A POTÊNCIA DOS MOTORES É REAJUSTADA COM VALOR
-    PROPORCIONAL À INCLINAÇÃO 
+    PROPORCIONAL À INCLINAÇÃO(Potência += 1000 * ângulo / 90)
  */
   if(velocidadeGeral > 0){
     get_angles_mpu();
@@ -268,12 +267,14 @@ void loop() {
       delay(1000);
       }
    }
-  
+   /*FIM DA TOMADA DE DECISÃO*/
+
+  // VERIFICA SE O WEB SERVER ESTÁ DISPONÍVEL
   WiFiClient client = server.available();
   if (!client) {
     return;
   }
-
+  // ESPERA ENQUANTO O WEB SERVER NÃO ESTIVER DISPONÍVEL
   while (!client.available()) {
     delay(1);
   }
@@ -287,15 +288,14 @@ void loop() {
   buf += "<head><title>Drone de Segurança</title><style> body{background-color: rgb(247, 247, 247);} h1{color: rgb(0, 0, 0) } img {width: 90px; height: 90px; display:inline-block}</style></head>";
   buf += "<div style=background-color: rgb(255, 126, 20);><h1>Modos de Voo</h1></div>";
   buf += "<a href=\"?function=up\"><button><img src='https://image.flaticon.com/icons/png/512/120/120891.png'></button></a>";
-  buf += "<a href=\"?function=down\"><button><img src=https://img-premium.flaticon.com/png/512/120/120890.png?token=exp=1623199028~hmac=be09e81e3bd7668704655a3bb70e4f3c'></button></a>";
+  buf += "<a href=\"?function=down\"><button><img src='https://image.flaticon.com/icons/png/512/54/54785.png'></button></a>";
   buf += "<div style='position: fixed; left: 0; bottom: 0; width: 100%; background-color: rgb(255, 126, 20); text-align: center;''>&#169;</div>";
   buf += "</html>\n";
-  
+  // PRINTA A INTERFACE HTML NA TELA DO WEB SERVICE
   client.print(buf);
   client.flush();
 
-  //RESPONDE À REQUISIÇÃO DO COMANDO DO SITE. 
-
+  //RESPONDE À REQUISIÇÃO DO COMANDO DO SITE. .
   if (req.indexOf("up") != -1) {
     if(velocidadeGeral <= 1000 || velocidadeGeral >= 0){
         velocidadeGeral += 200;
@@ -326,6 +326,7 @@ void loop() {
     client.stop();
   }
 }
+// INICIALIZA O MPU6050
 void init_mpu(){
   Wire.begin(4,5);
   config_mpu(); 
@@ -333,6 +334,7 @@ void init_mpu(){
   gyro_calibrator_mpu(2000);
   delay(1000);
 }
+// TRATA AS INFORMAÇÕES DO MPU E GERA OS ÂNGULOS
 void get_angles_mpu() {
   read_mpu();
   Acc[1] = atan(-1*(AcX/A_R)/sqrt(pow((AcY/A_R),2) + pow((AcZ/A_R),2)))*RAD_TO_DEG;
@@ -354,6 +356,7 @@ void get_angles_mpu() {
   Angle[2] = Angle[2]+Gy[2]*dt;
   delay(10);
 }
+// CONFIGURA O MPU COM AS SENSIBILIDADES DE CADA SENSOR
 void config_mpu(){
   Wire.beginTransmission(MPU6050);
   Wire.write(0x6B);
@@ -370,6 +373,7 @@ void config_mpu(){
   Wire.write(CONFIGACC);
   Wire.endTransmission(true);
 }
+// VERIFICA SE O MPU ESTÁ CONECTADO
 void find_mpu(){
   Wire.beginTransmission(MPU6050);
   int data = Wire.endTransmission(true);
@@ -381,6 +385,7 @@ void find_mpu(){
     Serial.println("Dispositivo não encontrado!");
   }
 }
+// VERIFICA O STATUS DO MPU
 bool check_mpu(){
   find_mpu();  
   int data; 
@@ -405,6 +410,7 @@ bool check_mpu(){
     return false;
     }
 }
+// REALIZA A LEITURA DO MPU
 void read_mpu(){
   Wire.beginTransmission(MPU6050);
   Wire.write(0x3B);
@@ -421,6 +427,7 @@ void read_mpu(){
   GyY=Wire.read()<<8|Wire.read();
   GyZ=Wire.read()<<8|Wire.read();
 }
+// PROCEDIMENTO QUE GERA VALORES DE CALIBRAÇÃO DO GIROSCÓPIO
 void gyro_calibrator_mpu(int count_entries){
   for(int i=0; i<count_entries; i++){
     read_mpu();
@@ -434,6 +441,7 @@ void gyro_calibrator_mpu(int count_entries){
   gyro_cal_Y /= count_entries;
   gyro_cal_Z /= count_entries;
 }
+// PRINTA OS ÂNGULOS NO SERIAL MONITOR 
 void print_angles(){
   Serial.print("Pitch: ");
   Serial.print(Angle[0]);
@@ -441,6 +449,7 @@ void print_angles(){
   Serial.print("Roll: ");
   Serial.println(Angle[1]); 
 }
+// PRINTA A POTÊNCIA DOS MOTORES NO SERIAL MONITOR
 void print_velocidade(){
   Serial.print("EC: ");
   Serial.print(motorEC);
