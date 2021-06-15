@@ -130,14 +130,14 @@ void loop() {
     if(Angle[0] >= 5 || Angle[1] >= 5 || Angle[0] <= -5 || Angle[1] <= -5){
       if(Angle[0] >= 5 && !(Angle[1] >= 5 || Angle[1] <= -5)){
         // DB e DC
-        if(velocidadeGeral + Angle[0] < 1000){
-            ControlarMotorDC( 0, VelocidadeMotorDC + Angle[0], motorDC );
-            ControlarMotorDB( 0, VelocidadeMotorDB + Angle[0], motorDB );
+        if(velocidadeGeral + sqrt(pow(Angle[0],2))*1000/90 < 1000){
+            ControlarMotorDC( 0, VelocidadeMotorDC + sqrt(pow(Angle[0],2))*1000/90, motorDC );
+            ControlarMotorDB( 0, VelocidadeMotorDB + sqrt(pow(Angle[0],2))*1000/90, motorDB );
           }
         else{
-          if(velocidadeGeral - Angle[0] > 0){
-            ControlarMotorEB( 0, VelocidadeMotorEB - Angle[0], motorEB );
-            ControlarMotorEC( 0, VelocidadeMotorEC - Angle[0], motorEC );
+          if(velocidadeGeral - sqrt(pow(Angle[0],2))*1000/90 > 0){
+            ControlarMotorEB( 0, VelocidadeMotorEB - sqrt(pow(Angle[0],2))*1000/90, motorEB );
+            ControlarMotorEC( 0, VelocidadeMotorEC - sqrt(pow(Angle[0],2))*1000/90, motorEC );
             }
            else{
             desliga_motores();
@@ -146,14 +146,14 @@ void loop() {
       }
       else if(Angle[0] <= -5 && !(Angle[1] >= 5 || Angle[1] <= -5)){
         // EB e EC
-        if(velocidadeGeral + Angle[0] < 1000){
-            ControlarMotorEB( 0, VelocidadeMotorEB + Angle[0], motorEB );
-            ControlarMotorEC( 0, VelocidadeMotorEC + Angle[0], motorEC );
+        if(velocidadeGeral + sqrt(pow(Angle[0],2))*1000/90 < 1000){
+            ControlarMotorEB( 0, VelocidadeMotorEB + sqrt(pow(Angle[0],2))*1000/90, motorEB );
+            ControlarMotorEC( 0, VelocidadeMotorEC + sqrt(pow(Angle[0],2))*1000/90, motorEC );
           }
         else{
-          if(velocidadeGeral - Angle[0] > 0){
-            ControlarMotorDC( 0, VelocidadeMotorDC - Angle[0], motorDC );
-            ControlarMotorDB( 0, VelocidadeMotorDB - Angle[0], motorDB );
+          if(velocidadeGeral - sqrt(pow(Angle[0],2))*1000/90 > 0){
+            ControlarMotorDC( 0, VelocidadeMotorDC - sqrt(pow(Angle[0],2))*1000/90, motorDC );
+            ControlarMotorDB( 0, VelocidadeMotorDB - sqrt(pow(Angle[0],2))*1000/90, motorDB );
             }
            else{
             desliga_motores();
@@ -162,14 +162,14 @@ void loop() {
       }
       else if(Angle[1] <= -5 && !(Angle[0] >= 5 || Angle[0] <= -5)){
         // DB e EB
-        if(velocidadeGeral + Angle[1] < 1000){
-            ControlarMotorEB( 0, VelocidadeMotorEB + Angle[1], motorEB );
-            ControlarMotorDB( 0, VelocidadeMotorDB + Angle[1], motorDB );
+        if(velocidadeGeral + sqrt(pow(Angle[1],2))*1000/90 < 1000){
+            ControlarMotorEB( 0, VelocidadeMotorEB + sqrt(pow(Angle[1],2))*1000/90, motorEB );
+            ControlarMotorDB( 0, VelocidadeMotorDB + sqrt(pow(Angle[1],2))*1000/90, motorDB );
           }
         else{
-          if(velocidadeGeral - Angle[1] > 0){
-            ControlarMotorDC( 0, VelocidadeMotorDC - Angle[1], motorDC );
-            ControlarMotorEC( 0, VelocidadeMotorEC - Angle[1], motorEC );
+          if(velocidadeGeral - sqrt(pow(Angle[1],2))*1000/90 > 0){
+            ControlarMotorDC( 0, VelocidadeMotorDC - sqrt(pow(Angle[1],2))*1000/90, motorDC );
+            ControlarMotorEC( 0, VelocidadeMotorEC - sqrt(pow(Angle[1],2))*1000/90, motorEC );
             }
            else{
             desliga_motores();
@@ -178,14 +178,14 @@ void loop() {
       }
       else if(Angle[1] >= 5 && !(Angle[0] >= 5 || Angle[0] <= -5)){
         // DC e EC
-        if(velocidadeGeral + Angle[1] < 1000){
-            ControlarMotorDC( 0, VelocidadeMotorDC + Angle[1], motorDC );
-            ControlarMotorEC( 0, VelocidadeMotorEC + Angle[1], motorEC );
+        if(velocidadeGeral + sqrt(pow(Angle[1],2))*1000/90 < 1000){
+            ControlarMotorDC( 0, VelocidadeMotorDC + sqrt(pow(Angle[1],2))*1000/90, motorDC );
+            ControlarMotorEC( 0, VelocidadeMotorEC + sqrt(pow(Angle[1],2))*1000/90, motorEC );
           }
         else{
-          if(velocidadeGeral - Angle[1] > 0){
-            ControlarMotorDB( 0, VelocidadeMotorDB - Angle[1], motorDB );
-            ControlarMotorEB( 0, VelocidadeMotorEB - Angle[1], motorEB );
+          if(velocidadeGeral - sqrt(pow(Angle[1],2))*1000/90 > 0){
+            ControlarMotorDB( 0, VelocidadeMotorDB - sqrt(pow(Angle[1],2))*1000/90, motorDB );
+            ControlarMotorEB( 0, VelocidadeMotorEB - sqrt(pow(Angle[1],2))*1000/90, motorEB );
             }
            else{
             desliga_motores(); 
@@ -195,14 +195,14 @@ void loop() {
       else if(Angle[0] >= 5 && Angle[1] >= 5){
         //DC
         int modulo = sqrt(pow(Angle[0],2)+pow(Angle[1],2));
-        if(velocidadeGeral + modulo < 1000){
-            ControlarMotorDC( 0, VelocidadeMotorDC + modulo, motorDC );
+        if(velocidadeGeral + modulo*1000/90 < 1000){
+            ControlarMotorDC( 0, VelocidadeMotorDC + modulo*1000/90, motorDC );
           }
         else{
-          if(velocidadeGeral - modulo > 0){
-            ControlarMotorEB( 0, VelocidadeMotorEB - modulo, motorEB );
-            ControlarMotorDB( 0, VelocidadeMotorDB - modulo, motorDB );
-            ControlarMotorEC( 0, VelocidadeMotorEC - modulo, motorEC );
+          if(velocidadeGeral - modulo*1000/90 > 0){
+            ControlarMotorEB( 0, VelocidadeMotorEB - modulo*1000/90, motorEB );
+            ControlarMotorDB( 0, VelocidadeMotorDB - modulo*1000/90, motorDB );
+            ControlarMotorEC( 0, VelocidadeMotorEC - modulo*1000/90, motorEC );
             }
            else{
             desliga_motores(); 
@@ -213,15 +213,15 @@ void loop() {
       else if(Angle[0] <= -5 && Angle[1] >= 5){
         //EC
         int modulo = sqrt(pow(Angle[0],2)+pow(Angle[1],2));
-        if(velocidadeGeral + modulo < 1000){
-            ControlarMotorEC( 0, VelocidadeMotorEC + modulo, motorEC );
+        if(velocidadeGeral + modulo*1000/90 < 1000){
+            ControlarMotorEC( 0, VelocidadeMotorEC + modulo*1000/90, motorEC );
             
           }
         else{
-          if(velocidadeGeral - modulo > 0){
-            ControlarMotorDC( 0, VelocidadeMotorDC - modulo, motorDC );
-            ControlarMotorDB( 0, VelocidadeMotorDB - modulo, motorDB );
-            ControlarMotorEB( 0, VelocidadeMotorEB - modulo, motorEB );
+          if(velocidadeGeral - modulo*1000/90 > 0){
+            ControlarMotorDC( 0, VelocidadeMotorDC - modulo*1000/90, motorDC );
+            ControlarMotorDB( 0, VelocidadeMotorDB - modulo*1000/90, motorDB );
+            ControlarMotorEB( 0, VelocidadeMotorEB - modulo*1000/90, motorEB );
             }
            else{
             desliga_motores(); 
@@ -231,15 +231,15 @@ void loop() {
       else if(Angle[1] <= -5 && Angle[0] >= 5){
         //DB
         int modulo = sqrt(pow(Angle[0],2)+pow(Angle[1],2));
-        if(velocidadeGeral + modulo < 1000){
-            ControlarMotorDB( 0, VelocidadeMotorDB + modulo, motorDB );
+        if(velocidadeGeral + modulo*1000/90 < 1000){
+            ControlarMotorDB( 0, VelocidadeMotorDB + modulo*1000/90, motorDB );
             
           }
         else{
-          if(velocidadeGeral - modulo > 0){
-            ControlarMotorDC( 0, VelocidadeMotorDC - modulo, motorDC );
-            ControlarMotorEB( 0, VelocidadeMotorEB - modulo, motorEB );
-            ControlarMotorEC( 0, VelocidadeMotorEC - modulo, motorEC );
+          if(velocidadeGeral - modulo*1000/90 > 0){
+            ControlarMotorDC( 0, VelocidadeMotorDC - modulo*1000/90, motorDC );
+            ControlarMotorEB( 0, VelocidadeMotorEB - modulo*1000/90, motorEB );
+            ControlarMotorEC( 0, VelocidadeMotorEC - modulo*1000/90, motorEC );
             }
            else{
             desliga_motores();
@@ -249,14 +249,14 @@ void loop() {
       else{/*Angle[1] <= -5 && Angle[0] <= 0*/
         //EB
         int modulo = sqrt(pow(Angle[0],2)+pow(Angle[1],2));
-        if(velocidadeGeral + modulo < 1000){
-            ControlarMotorEB( 0, VelocidadeMotorEB + modulo, motorEB );
+        if(velocidadeGeral + modulo*1000/90 < 1000){
+            ControlarMotorEB( 0, VelocidadeMotorEB + modulo*1000/90, motorEB );
           }
         else{
-          if(velocidadeGeral - modulo > 0){
-            ControlarMotorDC( 0, VelocidadeMotorDC - modulo, motorDC );
-            ControlarMotorDB( 0, VelocidadeMotorDB - modulo, motorDB );
-            ControlarMotorEC( 0, VelocidadeMotorEC - modulo, motorEC );
+          if(velocidadeGeral - modulo*1000/90 > 0){
+            ControlarMotorDC( 0, VelocidadeMotorDC - modulo*1000/90, motorDC );
+            ControlarMotorDB( 0, VelocidadeMotorDB - modulo*1000/90, motorDB );
+            ControlarMotorEC( 0, VelocidadeMotorEC - modulo*1000/90, motorEC );
             }
            else{
             desliga_motores();
