@@ -31,9 +31,9 @@ void loop(){
 void get_angles_mpu() {
   read_mpu();
   
-  Gy[0] -= gyro_cal_X;
-  Gy[1] -= gyro_cal_Y;
-  Gy[2] -= gyro_cal_Z;
+  GyX -= gyro_cal_X;
+  GyY -= gyro_cal_Y;
+  GyZ -= gyro_cal_Z;
   
   AcX /= A_R;
   AcY /= A_R;
