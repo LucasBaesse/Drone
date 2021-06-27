@@ -46,17 +46,12 @@ void get_angles_mpu() {
   Acc[1] = atan(-1*(AcX)/sqrt(pow((AcY),2) + pow((AcZ),2)))*RAD_TO_DEG;
   Acc[0] = atan((AcY)/sqrt(pow((AcX),2) + pow((AcZ),2)))*RAD_TO_DEG;
     
-  Gy[0] = GyX;
-  Gy[1] = GyY;
-  Gy[2] = GyZ;
-
   dt = (millis() - time_control) / 1000.0;
   time_control = millis();
 
-  Angle[0] = 0.98 *(Angle[0]+Gy[0]*dt) + 0.02*Acc[0];
-  Angle[1] = 0.98 *(Angle[1]+Gy[1]*dt) + 0.02*Acc[1];
+  Angle[0] = 0.98 *(Angle[0]+GyX*dt) + 0.02*Acc[0];
+  Angle[1] = 0.98 *(Angle[1]+GyY*dt) + 0.02*Acc[1];
  
-  Angle[2] = Angle[2]+Gy[2]*dt;
   Serial.print("Pitch: ");
   Serial.print(Angle[0]);
   Serial.print("\t");
